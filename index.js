@@ -1,32 +1,94 @@
-const express = require("express");
+// const express = require("express");
+// // Import Body parser
+// let bodyParser = require('body-parser');
+// // Import Mongoose
+// let mongoose = require('mongoose');
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 
-const app = express();
+// const app = express();
+// const SerialPort = require('serialport');
+// const Readline = require('@serialport/parser-readline');
+// const arduino = new SerialPort('COM7', { baudRate: 9600 });
+// const parser = arduino.pipe(new Readline({ delimiter: '\n' }));
+
+// // Import routes
+// let apiRoutes = require("./api-routes");
+// // Configure bodyparser to handle post requests
+// app.use(bodyParser.urlencoded({
+//     extended: true
+// }));
+// app.use(bodyParser.json());
+// // Connect to Mongoose and set connection variable
+// mongoose.connect('mongodb://localhost/careIn', { useNewUrlParser: true});
+// var db = mongoose.connection;
+
+// // Added check for DB connection
+// if(!db)
+//     console.log("Error connecting db")
+// else
+//     console.log("Db connected successfully")
+
+// var ArduinoData = "A"
+// // Read the port data
+// arduino.on("open", () => {
+//   console.log('serial port open');
+//   parser.on('data', data =>{
+//     ArduinoData = data
+//     console.log(ArduinoData);
+
+//   });
+// });
+
+// app.get("/arduino", (req, res) => {
+//   res.json({ message: ArduinoData });
+// });
+// // Use Api routes in the App
+// app.use('/api', apiRoutes);
+
+// // Send message for default URL
+// app.get('/', (req, res) => res.send('Hello World with Express'));
 
 
-const SerialPort = require('serialport');
+// app.listen(PORT, () => {
+//   console.log(`Server listening on http://localhost:${PORT}`);
+// });
 
-const Readline = require('@serialport/parser-readline');
-const arduino = new SerialPort('COM7', { baudRate: 9600 });
-const parser = arduino.pipe(new Readline({ delimiter: '\n' }));
+// Import express
+let express = require('express');
+// Import Body parser
+let bodyParser = require('body-parser');
+// Import Mongoose
+let mongoose = require('mongoose');
+// Initialise the app
+let app = express();
 
-var ArduinoData = "A"
-// Read the port data
-arduino.on("open", () => {
-  console.log('serial port open');
-  parser.on('data', data =>{
-    ArduinoData = data
-    console.log(ArduinoData);
+// Import routes
+let apiRoutes = require("./api-routes");
+// Configure bodyparser to handle post requests
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+// Connect to Mongoose and set connection variable
+mongoose.connect('mongodb://localhost/careIn', { useNewUrlParser: true});
+var db = mongoose.connection;
 
-  });
+// Added check for DB connection
+if(!db)
+    console.log("Error connecting db")
+else
+    console.log("Db connected successfully")
+
+// Setup server port
+var port = process.env.PORT || 3001;
+
+// Send message for default URL
+app.get('/', (req, res) => res.send('Hello World with Express'));
+
+// Use Api routes in the App
+app.use('/api', apiRoutes);
+// Launch app to listen to specified port
+app.listen(port, function () {
+    console.log("Running RestHub on http://localhost:" + port);
 });
-
-app.get("/api", (req, res) => {
-  res.json({ message: ArduinoData });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
-
